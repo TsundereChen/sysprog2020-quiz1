@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,10 +15,10 @@ void add_entry(node_t **head, int new_value)
     new_node->value = new_value;
     new_node->next = NULL;
 
-    AA1;
+    assert(new_node);
     while (*indirect)
         indirect = &(*indirect)->next;
-    AA2;
+    *indirect = new_node;
 }
 
 node_t *find_entry(node_t *head, int value)
@@ -41,24 +42,38 @@ void remove_entry(node_t **head, node_t *entry)
 
 node_t *swap_pair(node_t *head)
 {
-    for (node_t **node = &head; *node && (*node)->next; BB1) {
-        node_t *tmp = *node;
-        BB2;
-        tmp->next = (*node)->next;
-        (*node)->next = tmp;
-    }
+  for (node_t **node = &head; *node && (*node)->next;
+       node = &(*node)->next->next) {
+    node_t *tmp = *node;
+    *node = (*node)->next;
+    tmp->next = (*node)->next;
+    (*node)->next = tmp;
+  }
     return head;
 }
 
-node_t *reverse(node_t *head)
-{
-    node_t *cursor = NULL;
-    while (head) {
-        node_t *next = head->next;
-        CCC;
-        head = next;
-    }
-    return cursor;
+// node_t *reverse(node_t *head)
+//{
+// node_t *cursor = NULL;
+// while (head) {
+// node_t *next = head->next;
+// head->next = cursor;
+// cursor = head;
+// head = next;
+//}
+// return cursor;
+//}
+
+void reverse(node_t **head) {
+  node_t **now = head;
+  node_t *cursor = NULL;
+  while (*now != NULL) {
+    node_t *next = (*now)->next;
+    (*now)->next = cursor;
+    cursor = *now;
+    now = &next;
+  }
+  return;
 }
 
 void print_list(node_t *head)
@@ -97,7 +112,8 @@ int main(int argc, char const *argv[])
     head = swap_pair(head);
     print_list(head);
 
-    head = reverse(head);
+    // head = reverse(head);
+    reverse(&head);
     print_list(head);
 
     return 0;
