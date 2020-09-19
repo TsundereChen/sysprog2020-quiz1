@@ -67,12 +67,14 @@ node_t *swap_pair(node_t *head)
 void reverse(node_t **head) {
   node_t **now = head;
   node_t *cursor = NULL;
-  while (*now != NULL) {
-    node_t *next = (*now)->next;
+  node_t *next = NULL;
+  while ((*now)) {
+    next = (*now)->next;
     (*now)->next = cursor;
     cursor = *now;
-    now = &next;
+    *now = next;
   }
+  *now = cursor;
   return;
 }
 
