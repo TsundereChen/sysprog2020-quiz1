@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 typedef struct __node {
     int value;
@@ -72,38 +73,76 @@ void print_list(node_t *head)
     printf("\n");
 }
 
+int get_list_length(node_t *head) {
+  int len = 0;
+  for (node_t *current = head; current; current = current->next)
+    len++;
+  return len;
+}
+
+node_t *node_finder(node_t *head, int position) {
+  node_t *now = head;
+  for (int i = 0; i < position; i++) {
+    now = now->next;
+  }
+  return now;
+}
+
+void swapValue(node_t *a, node_t *b) {
+  if (a == b)
+    return;
+  a->value ^= b->value;
+  b->value ^= a->value;
+  a->value ^= b->value;
+}
+
+void fisherYatesShuffle(node_t *head, int length) {
+  node_t *now = head;
+  for (int i = 0; i < length; i++) {
+    int randInt = i + (rand() % (length - i));
+    node_t *targetNode = node_finder(head, randInt);
+    swapValue(now, targetNode);
+    now = now->next;
+  }
+}
+
 int main(int argc, char const *argv[])
 {
-    node_t *head = NULL;
+  srand(time(NULL));
+  node_t *head = NULL;
 
-    print_list(head);
+  print_list(head);
 
-    add_entry(&head, 72);
-    add_entry(&head, 101);
-    add_entry(&head, 108);
-    add_entry(&head, 109);
-    add_entry(&head, 110);
-    add_entry(&head, 111);
+  add_entry(&head, 72);
+  add_entry(&head, 101);
+  add_entry(&head, 108);
+  add_entry(&head, 109);
+  add_entry(&head, 110);
+  add_entry(&head, 111);
 
-    print_list(head);
+  print_list(head);
 
-    node_t *entry = find_entry(head, 101);
-    remove_entry(&head, entry);
+  // Fisher-Yates shuffle
+  fisherYatesShuffle(head, get_list_length(head));
+  print_list(head);
 
-    entry = find_entry(head, 111);
-    remove_entry(&head, entry);
+  node_t *entry = find_entry(head, 101);
+  remove_entry(&head, entry);
 
-    print_list(head);
+  entry = find_entry(head, 111);
+  remove_entry(&head, entry);
 
-    /* swap pair.
-     * See https://leetcode.com/problems/swap-nodes-in-pairs/
-     */
-    swap_pair(&head);
-    print_list(head);
+  print_list(head);
 
-    // head = reverse(head);
-    reverse(&head);
-    print_list(head);
+  /* swap pair.
+   * See https://leetcode.com/problems/swap-nodes-in-pairs/
+   */
+  swap_pair(&head);
+  print_list(head);
 
-    return 0;
+  // head = reverse(head);
+  reverse(&head);
+  print_list(head);
+
+  return 0;
 }
