@@ -52,18 +52,6 @@ node_t *swap_pair(node_t *head)
     return head;
 }
 
-// node_t *reverse(node_t *head)
-//{
-// node_t *cursor = NULL;
-// while (head) {
-// node_t *next = head->next;
-// head->next = cursor;
-// cursor = head;
-// head = next;
-//}
-// return cursor;
-//}
-
 void reverse(node_t **head) {
   node_t **now = head;
   node_t *cursor = NULL;
