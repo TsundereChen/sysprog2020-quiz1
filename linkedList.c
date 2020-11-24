@@ -100,3 +100,21 @@ void fisherYatesShuffle(node_t *head, int length) {
     now = now->next;
   }
 }
+
+void recursive_reverse(node_t **head) {
+  if (!head)
+    return;
+  recursive_reverse_step(*head, NULL, head);
+}
+
+void recursive_reverse_step(node_t *curr, node_t *prev, node_t **head) {
+  node_t *next = curr->next;
+  curr->next = prev;
+
+  if (!next) {
+    *head = curr;
+    return;
+  }
+
+  recursive_reverse_step(next, curr, head);
+}
